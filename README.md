@@ -10,6 +10,8 @@ Integrantes do projeto:
 
     Willian Marçal dos Santos
 
+    Matheus Guilherme Bueno Lemos
+
 Esse projeto tem como finalidade apresentar um sistema voltado para adoção de animais, bem simples, porém funcional.
 
 Tecnologias utilizadas:
