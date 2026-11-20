@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Conheça um animal do PetLar e solicite sua adoção." name="description"/><title>Perfil do animal | PetLar</title><link href="../css/cadastro.css" rel="stylesheet"/><link href="../css/style.css" rel="stylesheet"/><link href="../css/paginas.css" rel="stylesheet"/><link href="../css/upgrade.css" rel="stylesheet"/><link href="../css/perfis.css" rel="stylesheet"/><script defer="" src="../js/validaLogin.js"></script><script defer="" src="../js/dadosAnimais.js"></script><script defer="" src="../js/catalogoStore.js"></script><script defer="" src="../js/perfilAnimal.js"></script><script defer="" src="../js/identidadeUI.js"></script><link href="../css/identidade.css" rel="stylesheet"/></head><body class="site-modern"><nav aria-label="Navegação principal" class="navegacao"><a class="logo" href="../index.html">🐾 PetLar</a>
+<div class="acoes"><div class="menu"><a class="" href="../index.html">Início</a><a class="ativo" href="../pages/animais.html">Animais</a><a class="" href="../pages/quero-adotar.html">Quero Adotar</a><a class="" href="../pages/ja-adotados.html">Já Adotados</a><a class="" href="../pages/sobre.html">Sobre Nós</a><a class="" href="../pages/contato.html">Contato</a><a class="nav-perfil" href="../pages/perfil.html">Meu Perfil</a></div><span id="usuarioLogado">Visitante</span>
+<a class="btn-login" href="../pages/login.html" id="btnLogin">Login</a><button hidden="" id="btnLogout" onclick="logout()" type="button">Sair</button></div></nav><main class="detail-main"><a class="back-link" href="animais.html">← Voltar ao catálogo</a><div aria-live="polite" id="animalDetalhe"></div></main><footer><div class="footer-inner"><a class="footer-brand" href="../index.html">🐾 PetLar</a><p>Adoção responsável começa com um encontro.</p><small>© 2026 PetLar · Projeto acadêmico</small></div><a class="admin-demo-link" href="../admin/entrar.php" title="Login administrativo">Acesso da equipe</a></footer><div id="modalAdocao">
+<div class="cadastro-container">
+<div class="cadastro-card">
+<h1>🐾 PetLar</h1>
+<h2>Solicitação de Adoção</h2>
+<form id="formAdocao">
+<input id="animalSelecionado" type="hidden"/>
+<div class="campo">
+<label>Nome</label>
+<input id="nomeAdotante" readonly="">
+</input></div>
+<div class="campo">
+<label>Email</label>
+<input id="emailAdotante"/>
+</div>
+<div class="campo">
+<label>Telefone</label>
+<input id="telefoneAdotante" required=""/>
+</div>
+<div class="campo">
+<label>Motivo da adoção</label>
+<textarea id="motivo" required=""></textarea>
+</div>
+<p class="mensagem" id="mensagemAdocao"></p>
+<div class="linha modal-acoes" style="justify-content:space-between">
+<button id="cancelarAdocao" type="button">Cancelar</button>
+<button type="submit">Enviar</button>
+</div>
+</form>
+</div>
+</div>
+</div></body></html>

@@ -26,7 +26,7 @@ function login() {
 
     if (!usuario) {
 
-        mostrarMensagem("mensagemQuero", "Nenhum usuário cadastrado.");
+        mostrarMensagem("mensagemQuero", "E-mail ou senha incorretos.");
 
         return;
     }
@@ -34,6 +34,7 @@ function login() {
     if (usuario) {
 
         localStorage.setItem("usuarioLogado", usuario.email);
+        window.dispatchEvent(new Event("petlar:auth"));
 
         atualizarUsuario();
 
@@ -54,6 +55,7 @@ function login() {
 function logout() {
 
     localStorage.removeItem("usuarioLogado");
+    window.dispatchEvent(new Event("petlar:auth"));
 
     atualizarUsuario();
 

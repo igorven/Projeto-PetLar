@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Encontre seu novo amigo no catálogo de animais do PetLar." name="description"/>
+<title>Animais | PetLar</title><link href="../css/cadastro.css" rel="stylesheet"/><link href="../css/style.css" rel="stylesheet"/><link href="../css/paginas.css" rel="stylesheet"/><link href="../css/upgrade.css" rel="stylesheet"/>
+<script defer="" src="../js/validaLogin.js"></script><script defer="" src="../js/dadosAnimais.js"></script><script defer="" src="../js/taxonomiaAnimais.js"></script><script defer="" src="../js/catalogoStore.js"></script><script defer="" src="../js/catalogoRender.js"></script><script defer="" src="../js/animais.js"></script><link href="../css/perfis.css" rel="stylesheet"/><script defer="" src="../js/identidadeUI.js"></script><link href="../css/identidade.css" rel="stylesheet"/></head>
+<body class="site-modern"><nav aria-label="Navegação principal" class="navegacao"><a class="logo" href="../index.html">🐾 PetLar</a>
+<div class="acoes"><div class="menu"><a class="" href="../index.html">Início</a><a class="ativo" href="../pages/animais.html">Animais</a><a class="" href="../pages/quero-adotar.html">Quero Adotar</a><a class="" href="../pages/ja-adotados.html">Já Adotados</a><a class="" href="../pages/sobre.html">Sobre Nós</a><a class="" href="../pages/contato.html">Contato</a><a class="nav-perfil" href="../pages/perfil.html">Meu Perfil</a></div><span id="usuarioLogado">Visitante</span>
+<a class="btn-login" href="../pages/login.html" id="btnLogin">Login</a><button hidden="" id="btnLogout" onclick="logout()" type="button">Sair</button></div></nav>
+<main><div class="catalog-hero"><span class="eyebrow">🐾 CATÁLOGO DE ADOÇÃO</span><h1>Seu novo melhor amigo está por aqui</h1><p>Explore os perfis, conheça as características e encontre uma conexão especial.</p></div>
+<section class="catalog-main" id="adocao"><div class="catalog-toolbar"><div><h2>Conheça nossos animais</h2><p aria-live="polite" id="contadorAnimais">Encontre seu companheiro ideal</p></div>
+<div class="catalog-filters"><label class="search-wrap"><span class="sr-only">Pesquisar animal</span><input id="pesquisa" placeholder="Pesquisar pelo nome..." type="search"/></label><label class="sr-only" for="filtro">Filtrar por espécie</label><select id="filtro"><option value="todos">Todos os animais</option><option value="cachorro">Cachorros</option><option value="gato">Gatos</option><option value="outro">Outros</option></select><label class="sr-only" for="filtroRaca">Filtrar por raça</label><select aria-label="Filtrar por raça" id="filtroRaca"><option value="todas">Todas as raças</option></select></div></div>
+<div class="cards">
+<!-- CACHORROS -->
+<article class="card cachorro" data-id="1">
+<img alt="Thor" loading="lazy" src="https://images.unsplash.com/photo-1517849845537-4d257902454a?w=600"/>
+<div class="info">
+<h3>Thor</h3>
+<p>2 anos • Porte Médio • Vacinado</p>
+<a class="btn-detalhes" href="animal.html?id=1">Conhecer Thor</a><button class="btn-adotar" data-animal="Thor">
+                        Quero Adotar
+                    </button>
+</div>
+</article>
+<article class="card cachorro" data-id="2">
+<img alt="Mel" loading="lazy" src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600"/>
+<div class="info">
+<h3>Mel</h3>
+<p>3 anos • Porte Pequeno • Dócil</p>
+<a class="btn-detalhes" href="animal.html?id=2">Conhecer Mel</a><button class="btn-adotar" data-animal="Mel">
+                        Quero Adotar
+                    </button>
+</div>
+</article>
+<article class="card cachorro" data-id="3">
+<img alt="Max" loading="lazy" src="https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=600"/>
+<div class="info">
+<h3>Max</h3>
+<p>4 anos • Porte Grande • Vacinado</p>
+<a class="btn-detalhes" href="animal.html?id=3">Conhecer Max</a><button class="btn-adotar" data-animal="Max">
+                        Quero Adotar
+                    </button>
+</div>
+</article>
+<article class="card cachorro" data-id="4">
+<img alt="Rex" loading="lazy" src="https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?w=600"/>
+<div class="info">
+<h3>Rex</h3>
+<p>2 anos • Muito brincalhão</p>
+<a class="btn-detalhes" href="animal.html?id=4">Conhecer Rex</a><button class="btn-adotar" data-animal="Rex">
+                        Quero Adotar
+                    </button>
+</div>
+</article>
+<!-- GATOS -->
+<article class="card gato" data-id="5">
+<img alt="Luna" loading="lazy" src="https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600"/>
+<div class="info">
+<h3>Luna</h3>
+<p>1 ano • Castrada • Carinhosa</p>
+<a class="btn-detalhes" href="animal.html?id=5">Conhecer Luna</a><button class="btn-adotar" data-animal="Luna">
+                        Quero Adotar
+                    </button>
+</div>
+</article>
+<article class="card gato" data-id="6">
+<img alt="Mimi" loading="lazy" src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600"/>
+<div class="info">
+<h3>Mimi</h3>
+<p>2 anos • Brincalhona • Vacinada</p>
+<a class="btn-detalhes" href="animal.html?id=6">Conhecer Mimi</a><button class="btn-adotar" data-animal="Mimi">
+                        Quero Adotar
+                    </button>
+</div>
+</article>
+<article class="card gato" data-id="7">
+<img alt="Snow" loading="lazy" src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=600"/>
+<div class="info">
+<h3>Snow</h3>
+<p>1 ano • Castrado</p>
+<a class="btn-detalhes" href="animal.html?id=7">Conhecer Snow</a><button class="btn-adotar" data-animal="Snow">
+                        Quero Adotar
+                    </button>
+</div>
+</article>
+<!-- OUTROS -->
+<article class="card outro" data-id="8">
+<img alt="Bolinha" loading="lazy" src="https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=600"/>
+<div class="info">
+<h3>Bolinha</h3>
+<p>Coelho • 1 ano</p>
+<a class="btn-detalhes" href="animal.html?id=8">Conhecer Bolinha</a><button class="btn-adotar" data-animal="Bolinha">
+                        Quero Adotar
+                    </button>
+</div>
+</article>
+<article class="card outro" data-id="9">
+<img alt="Kiwi" loading="lazy" src="https://images.unsplash.com/photo-1444464666168-49d633b86797?w=600"/>
+<div class="info">
+<h3>Kiwi</h3>
+<p>Guarda-rio • 1 ano</p>
+<a class="btn-detalhes" href="animal.html?id=9">Conhecer Kiwi</a><button class="btn-adotar" data-animal="Kiwi">
+                        Quero Adotar
+                    </button>
+</div>
+</article>
+</div><p class="empty-catalog" hidden="" id="semResultados">Nenhum animal encontrado. Tente outro nome ou categoria.</p>
+<p class="mensagem status-pagina" id="mensagemQuero" role="status"></p></section></main>
+<footer><div class="footer-inner"><a class="footer-brand" href="../index.html">🐾 PetLar</a><p>Adoção responsável começa com um encontro.</p><small>© 2026 PetLar · Projeto acadêmico</small></div><a class="admin-demo-link" href="../admin/entrar.php" title="Login administrativo">Acesso da equipe</a></footer>
+<div id="modalAdocao">
+<div class="cadastro-container">
+<div class="cadastro-card">
+<h1>🐾 PetLar</h1>
+<h2>Solicitação de Adoção</h2>
+<form id="formAdocao">
+<input id="animalSelecionado" type="hidden"/>
+<div class="campo">
+<label>Nome</label>
+<input id="nomeAdotante" readonly="">
+</input></div>
+<div class="campo">
+<label>Email</label>
+<input id="emailAdotante"/>
+</div>
+<div class="campo">
+<label>Telefone</label>
+<input id="telefoneAdotante" required=""/>
+</div>
+<div class="campo">
+<label>Motivo da adoção</label>
+<textarea id="motivo" required=""></textarea>
+</div>
+<p class="mensagem" id="mensagemAdocao"></p>
+<div class="linha modal-acoes" style="justify-content:space-between">
+<button id="cancelarAdocao" type="button">Cancelar</button>
+<button type="submit">Enviar</button>
+</div>
+</form>
+</div>
+</div>
+</div></body></html>

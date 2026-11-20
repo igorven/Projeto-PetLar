@@ -1,0 +1,22 @@
+/* PetLar | perfis dos animais e área do adotante */
+.site-modern .nav-perfil{color:#365547;font-size:.89rem;padding:10px;border-radius:9px;text-decoration:none;font-weight:700}
+.site-modern .nav-perfil:hover,.site-modern .nav-perfil.ativo{background:#eaf5ed;color:var(--forest)}
+.catalog-main .card .btn-detalhes{display:block;text-align:center;border:1px solid #b9d0bf;border-radius:10px;color:var(--forest);font-weight:700;text-decoration:none;padding:12px;margin:0 0 9px}
+.catalog-main .card .btn-detalhes:hover{background:#edf6ee}
+.detail-main,.profile-main{width:min(1150px,92%);margin:auto;padding:36px 0 90px;min-height:65vh}
+.back-link{display:inline-flex;text-decoration:none;color:#36794e;font-weight:700;margin-bottom:28px}
+.animal-detail{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start;background:white;padding:28px;border:1px solid #e4eae4;border-radius:24px;box-shadow:var(--shadow)}
+.detail-photo{width:100%;aspect-ratio:4/4.3;object-fit:cover;border-radius:18px}
+.detail-copy{padding:12px 8px}.detail-copy h1{font-size:clamp(2.3rem,5vw,3.7rem);color:var(--forest);margin:14px 0 16px}.detail-copy .lead{color:#60756a;font-size:1.1rem;line-height:1.7}
+.detail-facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}
+.fact{border:1px solid #e0ebe2;padding:14px;border-radius:13px;background:#f8fbf7}.fact span,.profile-data-item span{display:block;color:#617769;font-size:.81rem;margin-bottom:5px}.fact strong,.profile-data-item strong{color:var(--forest);font-size:.97rem}
+.detail-disclaimer,.privacy-note{color:#78877d;font-size:.82rem;line-height:1.55;margin:14px 0 22px}
+.detail-copy .button-primary{border:0;font-size:1rem;cursor:pointer}.detail-copy .button-primary:disabled{opacity:.65;cursor:not-allowed}.detail-message{margin-top:15px;color:#a33f25}
+.profile-header{text-align:center;margin:15px auto 35px}.profile-header h1{font-size:clamp(2rem,4vw,3.4rem);margin:10px 0;color:var(--forest)}.profile-header p{color:var(--muted)}
+.profile-content{display:grid;gap:22px}.profile-panel{background:white;border:1px solid #e2eae3;border-radius:20px;padding:30px;box-shadow:0 8px 22px #15362609}.profile-panel h2{margin:8px 0 22px;color:var(--forest)}
+.profile-data{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.profile-data-item{border-radius:12px;background:#f6faf6;padding:15px}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.stat-box{padding:24px;background:#e9f3e9;border-radius:16px;text-align:center}.stat-box strong{display:block;font-size:2.2rem;color:var(--forest)}.stat-box span{color:#5b7464;font-size:.9rem}
+.request-list{display:grid;gap:10px;margin-bottom:25px}.request-item{border:1px solid #e0eae0;border-radius:12px;padding:17px;display:flex;justify-content:space-between;align-items:center;gap:15px}.request-item h3{margin:0;color:var(--forest)}.request-item p{color:#667b6d;margin:3px 0 0;font-size:.87rem}
+.status-chip{display:inline-block;text-transform:capitalize;font-size:.82rem;border-radius:20px;padding:7px 12px;background:#f0e8d4;color:#785522;font-weight:700}.status-aprovada{background:#daf2dc;color:#1b6a34}.status-recusada{background:#fbe2df;color:#993f36}
+@media(max-width:800px){.animal-detail{grid-template-columns:1fr;gap:15px;padding:16px}.detail-photo{aspect-ratio:16/12}.detail-facts,.profile-data{grid-template-columns:1fr}.profile-stats{grid-template-columns:1fr 1fr 1fr}.request-item{align-items:flex-start;flex-direction:column}}
+@media(max-width:480px){.profile-stats{grid-template-columns:1fr}.profile-panel{padding:19px}}

@@ -1,543 +1,96 @@
-
-const buttons = document.querySelectorAll(".btn-adotar");
-
-buttons.forEach(btn => {
-
-    btn.addEventListener("click", () =>{
-
-        queroAdotar(btn.dataset.animal);
-    });
-});
-
-/* Pesquisa animais na barra de pesquisa e filtra por cards os tipos de animais */
-
-const search = document.getElementById("pesquisa");
-
-const filter = document.getElementById("filtro");
-
-const cards = document.querySelectorAll(".card");
-
-function mostrarMensagem(
-    id,
-    texto
-    ){
-    
-    const elemento =
-    document.getElementById(
-    id
-    );
-    
-    if(elemento){
-    
-    elemento.textContent =
-    texto;
-    
-    }
-    
+const cardsContainer = document.querySelector('#adocao .cards');
+const pesquisa = document.getElementById('pesquisa');
+const filtro = document.getElementById('filtro');
+const modal = document.getElementById('modalAdocao');
+let animais = [];
+let animalAtual = null;
+const msg = (id, texto) => { const el = document.getElementById(id); if(el) el.textContent = texto; };
+async function requisitar(url, options) {
+  const res = await fetch(url, options);
+  const json = await res.json();
+  if(!res.ok) throw new Error(json.erro || 'Erro na operação.');
+  return json;
 }
-
+function criarCard(animal) {
+  const card = document.createElement('article');
+  card.className = `card ${animal.categoria}`;
+  const img = document.createElement('img');
+  img.src = animal.fotoUrl || '';
+  img.alt = animal.nomeAnimal;
+  img.loading = 'lazy';
+  const info = document.createElement('div'); info.className = 'info';
+  const titulo = document.createElement('h3'); titulo.textContent = animal.nomeAnimal;
+  const descricao = document.createElement('p');
+  descricao.textContent = [animal.idadeAnimal != null ? `${animal.idadeAnimal} ano(s)` : '', animal.descricaoAnimal].filter(Boolean).join(' • ');
+  const botao = document.createElement('button');
+  botao.className = 'btn-adotar'; botao.textContent = 'Quero Adotar';
+  botao.addEventListener('click', () => abrirModal(animal));
+  info.append(titulo,descricao,botao); card.append(img,info);
+  return card;
+}
 function filterAnimals() {
-
-    const texto =
-    search.value
-    .toLowerCase()
-    .trim();
-    
-    const categoria =
-    filter.value;
-    
-    const usuarios =
-    
-    JSON.parse(
-    localStorage.getItem(
-    "usuario"
-    )
-    
-    )||[];
-    
-    /* pega todos animais adotados */
-    
-    const adotados =
-    
-    usuarios.flatMap(
-    u =>
-    u.adocoes || []
-    );
-    
-    cards.forEach(card=>{
-    
-    const nome =
-    
-    card
-    .querySelector(
-    "h3"
-    )
-    .textContent
-    .toLowerCase();
-    
-    const categoriaOk =
-    
-    categoria === "todos"
-    
-    ||
-    
-    card.classList.contains(
-    categoria
-    );
-    
-    const textoOk =
-    nome.includes(texto);
-    
-    /* verifica se já foi adotado */
-    
-    const adotado =
-    
-    adotados.some(
-    a=>
-    a.nome.toLowerCase()
-    === nome
-    );
-    
-    /* só mostra se não estiver adotado */
-    
-    card.style.display =
-    
-    textoOk &&
-    categoriaOk &&
-    !adotado
-    
-    ?
-    
-    ""
-    
-    :
-    
-    "none";
-    });
+  const busca = pesquisa.value.toLocaleLowerCase('pt-BR').trim();
+  const categoria = filtro.value;
+  cardsContainer.replaceChildren(...animais.filter(a => a.statusAnimal === 'disponivel' && (categoria === 'todos' || a.categoria === categoria) && a.nomeAnimal.toLocaleLowerCase('pt-BR').includes(busca)).map(criarCard));
 }
-
-search.addEventListener(
-    "input",
-    filterAnimals
-    );
-    
-    filter.addEventListener(
-    "change",
-    filterAnimals
-    );
-
-
-/* Quando o usuário clicar em "Quero Adotar", o seguinte código deverá ocorrer: */
-
-function queroAdotar(animalName) {
-
-    const emailLogado = localStorage.getItem("usuarioLogado");
-
-    if (!emailLogado) {
-
-        mostrarMensagem("mensagemQuero", "Faça login para adotar.");
-
-        return;
+async function carregarAnimais() {
+  try { animais = (await requisitar('api/animais.php')).animais; filterAnimals(); }
+  catch(e) { msg('mensagemQuero', e.message); }
+}
+async function abrirModal(animal) {
+  try {
+    const sessao = await requisitar('api/sessao.php');
+    if (!sessao.logado) return msg('mensagemQuero','Faça login para solicitar adoção.');
+    animalAtual = animal;
+    document.getElementById('animalSelecionado').value = String(animal.idAnimal);
+    document.getElementById('nomeAdotante').value = sessao.usuario.nome;
+    document.getElementById('emailAdotante').value = '';
+    document.getElementById('telefoneAdotante').value = '';
+    modal.style.display = 'flex';
+    msg('mensagemAdocao','');
+  } catch(e) { msg('mensagemQuero',e.message); }
+}
+async function confirmarAdocao() {
+  try {
+    const body = {
+      idAnimal: Number(document.getElementById('animalSelecionado').value),
+      telefone: document.getElementById('telefoneAdotante').value.trim(),
+      motivo: document.getElementById('motivo').value.trim()
+    };
+    const result = await requisitar('api/solicitacoes.php', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    modal.style.display = 'none'; document.getElementById('formAdocao').reset();
+    msg('mensagemQuero', result.mensagem);
+    await carregarMinhasSolicitacoes();
+  } catch(e) { msg('mensagemAdocao',e.message); }
+}
+async function carregarMinhasSolicitacoes() {
+  const ul = document.getElementById('listaQueroAdotar'); ul.replaceChildren();
+  try {
+    const sessao = await requisitar('api/sessao.php');
+    if (!sessao.logado) return msg('mensagemQuero','Faça login para visualizar suas solicitações.');
+    const {solicitacoes} = await requisitar('api/solicitacoes.php');
+    msg('mensagemQuero', solicitacoes.length ? '' : 'Nenhuma solicitação enviada.');
+    for(const s of solicitacoes) {
+      const li = document.createElement('li');
+      li.textContent = `${s.nomeAnimal} — ${s.statusSolicitacao} (${s.dataSolicitacao})`;
+      ul.append(li);
     }
-
-
-    const usuarios = JSON.parse(localStorage.getItem("usuario")) || [];
-
-    const usuario = usuarios.find(u => u.email === emailLogado);
-
-    if (!usuario) {
-
-        mostrarMensagem("mensagemQuero", "Usuário não encontrado")
-
-        return;
+  } catch(e) { msg('mensagemQuero',e.message); }
+}
+async function carregarAdotados() {
+  const ul = document.getElementById('listaAdotados'); ul.replaceChildren();
+  try {
+    const {animais: adotados} = await requisitar('api/adotados.php');
+    msg('mensagemAdotados', adotados.length ? '' : 'Nenhum animal adotado.');
+    for(const a of adotados) {
+      const li = document.createElement('li'); li.textContent = a.nomeAnimal; ul.append(li);
     }
-
-    const todosAdotados = usuarios.flatMap(u => u.adocoes || []);
-
-    const alreadyExists = todosAdotados.some(a => a.nome === animalName);
-
-    if(alreadyExists) {
-
-        mostrarMensagem("mensagemQuero", "Esse animal já foi selecionado.")
-
-        return;
-    }
-
-    document.getElementById("animalSelecionado").value = animalName;
-
-    document.getElementById("nomeAdotante").value = usuario.nome;
-
-    document.getElementById("emailAdotante").value = usuario.email;
-
-    document.getElementById("telefoneAdotante").value = usuario.telefone || "";
-
-    document.getElementById("modalAdocao").style.display = "flex";
-
-    mostrarMensagem("mensagemQuero", "");
+  } catch(e) { msg('mensagemAdotados',e.message); }
 }
-
-
-function botaoAdocao(){
-
-    const botao =
-    document.getElementById(
-    "confirmarAdocao"
-    );
-    
-    if(!botao) return;
-    
-    const usuario =
-    localStorage.getItem(
-    "usuarioLogado"
-    );
-    
-    botao.hidden = !usuario;
-    
-}
-
-/* A lista de animais escolhidos deverá ser atualizada com a seguinte função: */
-
-function atualizarLista() {
-
-
-        const email =
-        
-        localStorage.getItem(
-        "usuarioLogado"
-        );
-        
-        
-        const ul =
-        
-        document.getElementById(
-        "listaQueroAdotar"
-        );
-        
-        
-        const msg =
-        
-        document.getElementById(
-        "mensagemQuero"
-        );
-        
-        
-        ul.innerHTML = "";
-        
-        
-        if(!email){
-        
-        msg.textContent =
-        "Faça login para visualizar suas solicitações.";
-        
-        return;
-        
-        }
-        
-        
-        const usuarios =
-        
-        JSON.parse(
-        localStorage.getItem(
-        "usuario"
-        )
-        
-        )||[];
-        
-        
-        const usuario =
-        
-        usuarios.find(
-        u =>
-        u.email === email
-        );
-        
-        
-        if(
-        !usuario ||
-        !usuario.adocoes ||
-        usuario.adocoes.length === 0
-        ){
-        
-        msg.textContent =
-        "Nenhuma solicitação enviada.";
-        
-        return;
-        
-        }
-        
-        
-        msg.textContent = "";
-        
-        
-        usuario.adocoes.forEach(a=>{
-        
-        const li =
-        
-        document.createElement(
-        "li"
-        );
-        
-        
-        li.textContent =
-        
-        `${a.nome}
-        (
-        ${a.data}
-        )`;
-        
-        
-        ul.appendChild(
-        li
-        );
-        
-        });
-
-    botaoAdocao();
-    
-    }
-
-/* Confirma a adoção do animal */
-
-function confirmarAdocao() {
-
-    const animal =
-
-document
-.getElementById(
-"animalSelecionado"
-)
-.value;
-
-
-const motivo =
-
-document
-.getElementById(
-"motivo"
-)
-.value
-.trim();
-
-
-if(!motivo){
-
-mostrarMensagem(
-"mensagemAdocao",
-"Explique o motivo da adoção."
-);
-
-return;
-
-}
-
-
-const usuarios =
-
-JSON.parse(
-localStorage.getItem(
-"usuario"
-)
-
-)||[];
-
-
-const email =
-
-localStorage.getItem(
-"usuarioLogado"
-);
-
-
-const usuario =
-
-usuarios.find(
-u =>
-u.email === email
-);
-
-
-if(!usuario){
-
-return;
-
-}
-
-
-if(!usuario.adocoes){
-
-usuario.adocoes = [];
-
-}
-
-const jaExiste =
-usuario.adocoes.some(
-a=>
-a.nome===animal
-);
-
-if(jaExiste){
-
-mostrarMensagem(
-"mensagemAdocao",
-"Você já solicitou esse animal."
-);
-
-return;
-
-}
-
-
-usuario.adocoes.push({
-
-nome:animal,
-
-motivo:motivo,
-
-data:
-
-new Date()
-
-.toLocaleDateString(
-"pt-BR"
-)
-
-});
-
-
-localStorage.setItem(
-
-"usuario",
-
-JSON.stringify(
-usuarios
-)
-
-);
-
-
-document
-.getElementById(
-"modalAdocao"
-)
-
-.style.display =
-"none";
-
-
-document
-.getElementById(
-"formAdocao"
-)
-
-.reset();
-
-mostrarMensagem(
-    "mensagemAdocao",
-    ""
-    );
-
-
-atualizarLista();
-
-atualizarAdotados();
-
-filterAnimals();
-
-}
-
-/* Atualiza a quantidade de animais adotados */
-
-function atualizarAdotados() {
-
-    const usuarios = JSON.parse(localStorage.getItem("usuario")) || [];
-
-    const ul = document.getElementById("listaAdotados");
-
-    ul.innerHTML = "";
-
-    usuarios.forEach(u => {
-        (u.adocoes || []).forEach(a => {
-            const li = document.createElement("li");
-
-            li.textContent = `${a.nome} - adotado(a) por ${u.nome}`;
-
-            ul.appendChild(li);
-        });
-    });
-}
-
-/* Após o animais serem adotados, ocultar o card do animal em si */
-
-function ocultarCards() {
-
-    filterAnimals();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    
-    const form =
-
-document.getElementById(
-"formAdocao"
-);
-
-if(form){
-
-form.addEventListener(
-"submit",
-
-(e)=>{
-
-e.preventDefault();
-
-confirmarAdocao();
-
-});
-
-}
-
-
-atualizarLista();
-
-atualizarAdotados();
-
-filterAnimals();
-
-
-document
-.getElementById(
-"cancelarAdocao"
-)
-
-.addEventListener(
-"click",
-
-()=>{
-
-document
-.getElementById(
-"modalAdocao"
-)
-
-.style.display =
-"none";
-
-/* limpa formulário */
-
-document
-.getElementById(
-"formAdocao"
-)
-
-.reset();
-
-/* limpa mensagem */
-
-mostrarMensagem(
-"mensagemAdocao",
-""
-);
-
-});
-
+document.addEventListener('DOMContentLoaded', () => {
+  pesquisa.addEventListener('input', filterAnimals);
+  filtro.addEventListener('change', filterAnimals);
+  document.getElementById('formAdocao').addEventListener('submit', e => {e.preventDefault(); confirmarAdocao();});
+  document.getElementById('cancelarAdocao').addEventListener('click', () => {modal.style.display='none'; document.getElementById('formAdocao').reset();});
+  carregarAnimais(); carregarMinhasSolicitacoes(); carregarAdotados();
 });
