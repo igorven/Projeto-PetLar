@@ -1,4 +1,4 @@
-Projeto de Desenvolvimento Front-End - PetLar
+Projeto de Desenvolvimento Back-end - PetLar
 
 Curso de Análise e Desenvolvimento de Sistemas - UNISUAM
 
@@ -12,12 +12,14 @@ Integrantes do projeto:
 
     Matheus Guilherme Bueno Lemos
 
-Esse projeto tem como finalidade apresentar um sistema voltado para adoção de animais, bem simples, porém funcional.
+Esse projeto tem como finalidade apresentar um sistema voltado para adoção de animais, agora com sistema administrativo e de cara nova!
 
 Tecnologias utilizadas:
 
     HTML
     CSS
     JavaScript
+    PHP
+    MySQL
 
 
